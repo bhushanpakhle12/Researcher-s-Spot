@@ -15,21 +15,78 @@
     <img class="bg" src="BG.png">
     <div class="container">
         <h2>Registration</h2>
-
-
-
-        <form action="login.html" method="post">
+        <form role="form">
             <input type="text" name="name" id="name" placeholder="Enter your name">
-            <input type="text" name="age" id="age" placeholder="Enter your UserName">
-            <input type="text" name="gender" id="gender" placeholder="Enter your gender">
+            <input type="text" name="username" id="username" placeholder="Enter your UserName">
             <input type="email" name="email" id="email" placeholder="Enter your email">
             <input type="phone" name="phone" id="phone" placeholder="Enter your phone">
-            <textarea name="desc" id="desc" cols="30" rows="10" placeholder="Enter password"></textarea>
-            <button class="btn">
-              <a href="login.html">Submit</a> </button>
+            <input type="password" name="password" id="pass" placeholder="Enter password">
+            <button class="btn" id="submitb" type="submit">Submit</button>
         </form>
     </div>
     <script src="index.js"></script>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-app.js";
+    import { getFirestore } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-firestore.js";
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/7.14.1-0/firebase.js"></script>
+
+<script type="text/javascript">
+(function() {
+    var firebaseConfig = {
+        apiKey: "AIzaSyDaeigf1b7PIWtUXa0zrIIjkEvWVvxGkmk",
+        authDomain: "researcher-s-spot-website.firebaseapp.com",
+        projectId: "researcher-s-spot-website",
+        storageBucket: "researcher-s-spot-website.appspot.com",
+        messagingSenderId: "262210502294",
+        appId: "1:262210502294:web:ceacb05a88b6810d654cb7"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+
+    var push_to_firebase = function (data) {
+        // alert("Thanks for sending a message. I'll try and get back to you as soon as possible.")
+        var db = firebase.firestore();
+
+        db.collection("Registration Form Details").add({
+            name: data["name"],
+            username: data["username"],
+            email: data["email"],
+            phone: data["phone"],
+            password: data["pass"],
+            timestamp: Date.now()
+        })
+        .then(function(docRef) {
+            console.log("Message sent, ID: ", docRef.id);
+            alert("Dear user your form has been submitted");
+        })
+        .catch(function(error) {
+            console.error("Message could not be sent: ", error);
+        });
+    }
+
+    var contact_submit = function() {
+        var name = document.getElementById("name");
+        var username = document.getElementById("username");
+        var email = document.getElementById("email");
+        var phone = document.getElementById("phone");
+        var password = document.getElementById("pass");
+
+        var data = {
+            "name": name.value,
+            "username": username.value,
+            "email": email.value,
+            "phone": phone.value,
+            "password": password.value
+        }
+        push_to_firebase(data);
+
+    }
+
+    document.getElementById("submitb").addEventListener("click", contact_submit);
+})();
+</script>
 
 </body>
 
